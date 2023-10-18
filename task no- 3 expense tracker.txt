@@ -1,0 +1,113 @@
+public class Expense {
+    private String description;
+    private double amount;
+    private String category;
+
+    public Expense(String description, double amount, String category) {
+        this.description = description;
+        this.amount = amount;
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+}
+import java.util.ArrayList;
+import java.util.List;
+
+public class ExpenseTracker {
+    private List<Expense> expenses;
+
+    public ExpenseTracker() {
+        expenses = new ArrayList<>();
+    }
+
+    public void addExpense(String description, double amount, String category) {
+        Expense expense = new Expense(description, amount, category);
+        expenses.add(expense);
+    }
+
+    public List<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public double getTotalExpenses() {
+        double total = 0;
+        for (Expense expense : expenses) {
+            total += expense.getAmount();
+        }
+        return total;
+    }
+
+    public double getCategoryTotal(String category) {
+        double total = 0;
+        for (Expense expense : expenses) {
+            if (expense.getCategory().equalsIgnoreCase(category)) {
+                total += expense.getAmount();
+            }
+        }
+        return total;
+    }
+}
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        ExpenseTracker expenseTracker = new ExpenseTracker();
+        Scanner scanner = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("Expense Tracker Menu:");
+            System.out.println("1. Add Expense");
+            System.out.println("2. View Expenses");
+            System.out.println("3. Expense Summaries");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();  // Consume newline
+
+            switch (choice) {
+                case 1:
+                    System.out.print("Enter Description: ");
+                    String description = scanner.nextLine();
+                    System.out.print("Enter Amount: ");
+                    double amount = scanner.nextDouble();
+                    scanner.nextLine();  // Consume newline
+                    System.out.print("Enter Category: ");
+                    String category = scanner.nextLine();
+
+                    expenseTracker.addExpense(description, amount, category);
+                    break;
+                case 2:
+                    List<Expense> expenses = expenseTracker.getExpenses();
+                    System.out.println("Expense List:");
+                    for (Expense expense : expenses) {
+                        System.out.println(expense);
+                    }
+                    break;
+                case 3:
+                    System.out.println("Total Expenses: " + expenseTracker.getTotalExpenses());
+                    System.out.print("Enter Category for Summary: ");
+                    String summaryCategory = scanner.nextLine();
+                    System.out.println("Total Expenses in " + summaryCategory + ": " + expenseTracker.getCategoryTotal(summaryCategory));
+                    break;
+                case 4:
+                    System.out.println("Exiting Expense Tracker.");
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+}
+
